@@ -42,12 +42,12 @@ function payWithFlutterwave(recipeName) {
     }
 
     FlutterwaveCheckout({
-        public_key: 'FLWPUBK-5c9f92dd2ffb8db88f88179527f52b27-X', // Replace with your public key
+        public_key: 'your-flutterwave-public-key', // Replace with your public key
         tx_ref: '' + Math.floor((Math.random() * 1000000000) + 1),
         amount: 100, // Amount set to 100 NGN
         currency: "NGN", // Currency set to NGN
         payment_options: "card, banktransfer, ussd",
-        redirect_url: "https://african-recipe-finder.vercel.app/cart", // Replace with your actual redirect URL
+        redirect_url: "https://recipe-finder-one-taupe.vercel.app/", // Redirect to cart page
         meta: {
             consumer_id: 23,
             consumer_mac: "92a3-912ba-1192a"
@@ -83,7 +83,8 @@ async function verifyPayment(transaction_id, recipeName, userEmail) {
     const data = await response.json();
 
     if (data.status === 'success') {
-        alert('Payment successful. Recipe sent to your email.');
+        alert('Payment successful. Redirecting to cart page.');
+        window.location.href = '/cart'; // Redirect to the cart page
     } else {
         alert('Payment verification failed. Please try again.');
     }
