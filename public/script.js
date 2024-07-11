@@ -33,7 +33,14 @@ function displayRecipes(recipes) {
     });
 }
 
-function payWithFlutterwave(recipeName, userEmail) {
+function payWithFlutterwave(recipeName) {
+    const userEmail = document.getElementById('userEmail').value;
+
+    if (!userEmail) {
+        alert('Please enter your email.');
+        return;
+    }
+
     FlutterwaveCheckout({
         public_key: 'FLWPUBK-5c9f92dd2ffb8db88f88179527f52b27-X', // Replace with your public key
         tx_ref: '' + Math.floor((Math.random() * 1000000000) + 1),
@@ -46,7 +53,7 @@ function payWithFlutterwave(recipeName, userEmail) {
             consumer_mac: "92a3-912ba-1192a"
         },
         customer: {
-            email: userEmail, // Replace with actual user email
+            email: userEmail,
             phonenumber: "080****4528",
             name: "John Doe" // Replace with actual user name
         },
@@ -82,21 +89,10 @@ async function verifyPayment(transaction_id, recipeName, userEmail) {
     }
 }
 
+function openNav() {
+    document.getElementById("mySidenav").style.width = "250px";
+}
 
-async function verifyPayment(transaction_id, recipeName, userEmail) {
-    const response = await fetch('/verify-payment', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ transaction_id, recipe: recipeName, email: userEmail })
-    });
-
-    const data = await response.json();
-
-    if (data.status === 'success') {
-        alert('Payment successful. The recipe has been sent to your email.');
-    } else {
-        alert('Payment verification failed. Please try again.');
-    }
+function closeNav() {
+    document.getElementById("mySidenav").style.width = "0";
 }
