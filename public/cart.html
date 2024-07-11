@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="mySidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <a href="#">Login</a>
+        <a href="#">About</a>
+        <a href="#">Cart</a>
+        <a href="#">Clients Feedback</a>
+        <a href="index.html">Home</a>
+    </div>
+
+    <span class="menu-button" onclick="openNav()">&#9776;</span>
+
+    <header>
+        <h1>Your Cart</h1>
+    </header>
+
+    <section id="cartContent">
+        <p>Loading recipe details...</p>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 Moore's Recipe Collection</p>
+    </footer>
+
+    <script>
+        async function fetchRecipeDetails() {
+            try {
+                const response = await fetch('/api/recipe-details');
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const recipe = await response.json();
+
+                const cartContent = document.getElementById('cartContent');
+                cartContent.innerHTML = `
+                    <div class="recipe">
+                        <img src="${recipe.image}" alt="${recipe.label}">
+                        <h3>${recipe.label}</h3>
+                        <p>Calories: ${recipe.calories.toFixed(2)}</p>
+                        <p>Ingredients: ${recipe.ingredientLines.join(', ')}</p>
+                        <a href="${recipe.url}" target="_blank">Full Recipe</a>
+                    </div>
+                `;
+            } catch (error) {
+                console.error('Error fetching recipe details:', error);
+                const cartContent = document.getElementById('cartContent');
+                cartContent.innerHTML = '<p>Failed to load recipe details. Please try again.</p>';
+            }
+        }
+
+        // Call fetchRecipeDetails function when the page loads
+        document.addEventListener('DOMContentLoaded', fetchRecipeDetails);
+    </script>
+</body>
+</html>
